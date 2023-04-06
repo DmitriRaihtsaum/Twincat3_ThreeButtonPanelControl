@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="MachineControlMode" Id="{fc77a0ee-1a13-46f8-8dc6-f24d22b6fcea}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK MachineControlMode
+VAR_INPUT
+	ControlPushButtonBlock :tyPushButtonsControlBlock;	
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	MachineMode :tyMachineMode;
+	R_TrigRunPushBotton :R_TRIG; 
+	R_TrigStopPushBotton :R_TRIG; 
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[//=============================================================================
+// Dmitri Raihtsaum - Copyright 2023
+// Created By: Dmitri Raihtsaum
+//-----------------------------------------------------------------------------
+// Tested with:   Twincat 3 
+// Engineering:   Twincat 3 
+// Functionality: Machine controll pushbuttons logic for training
+// Date: 01.04.2023
+// Rev 0.1
+//=============================================================================
+
+// Mapping 
+R_TrigRunPushBotton(clk:=ControlPushButtonBlock.bRunPushButton ); 
+R_TrigStopPushBotton(clk:=ControlPushButtonBlock.bStopPushButton ); 
+// Protection 
+IF MachineMode.MashineInRunMode AND MachineMode.MashineInStopMode THEN
+	MachineMode.MashineInRunMode  := FALSE; 
+	MachineMode.MashineInStopMode := TRUE; 
+END_IF;
+IF NOT MachineMode.MashineInRunMode AND NOT  MachineMode.MashineInStopMode THEN
+	MachineMode.MashineInRunMode  := FALSE; 
+	MachineMode.MashineInStopMode := TRUE; 
+END_IF;
+// Logic 
+IF R_TrigStopPushBotton.Q THEN 
+	MachineMode.MashineInRunMode  := FALSE; 
+	MachineMode.MashineInStopMode := TRUE  ; 
+END_IF
+IF R_TrigRunPushBotton.Q THEN 
+	MachineMode.MashineInRunMode  := TRUE; 
+	MachineMode.MashineInStopMode := FALSE ; 
+END_IF
+//Global Reset 
+IF MachineMode.MashineInStopMode AND ControlPushButtonBlock.bResetPushButton THEN 
+	GVL.bGlobalReset := TRUE;
+	ELSE 
+		GVL.bGlobalReset := FALSE;
+END_IF;
+
+///////////////////////END///////////////////////
+
+]]></ST>
+    </Implementation>
+    <LineIds Name="MachineControlMode">
+      <LineId Id="55" Count="8" />
+      <LineId Id="52" Count="0" />
+      <LineId Id="54" Count="0" />
+      <LineId Id="9" Count="0" />
+      <LineId Id="14" Count="0" />
+      <LineId Id="17" Count="0" />
+      <LineId Id="13" Count="0" />
+      <LineId Id="18" Count="0" />
+      <LineId Id="20" Count="0" />
+      <LineId Id="22" Count="0" />
+      <LineId Id="21" Count="0" />
+      <LineId Id="25" Count="2" />
+      <LineId Id="24" Count="0" />
+      <LineId Id="23" Count="0" />
+      <LineId Id="28" Count="0" />
+      <LineId Id="30" Count="0" />
+      <LineId Id="32" Count="0" />
+      <LineId Id="31" Count="0" />
+      <LineId Id="35" Count="2" />
+      <LineId Id="34" Count="0" />
+      <LineId Id="38" Count="0" />
+      <LineId Id="40" Count="1" />
+      <LineId Id="43" Count="2" />
+      <LineId Id="47" Count="0" />
+      <LineId Id="46" Count="0" />
+      <LineId Id="42" Count="0" />
+      <LineId Id="33" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

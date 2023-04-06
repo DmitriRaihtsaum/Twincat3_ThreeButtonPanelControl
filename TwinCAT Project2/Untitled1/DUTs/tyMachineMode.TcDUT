@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <DUT Name="tyMachineMode" Id="{9750e765-36f3-46a3-8020-26558e75d563}">
+    <Declaration><![CDATA[TYPE tyMachineMode :
+STRUCT
+	MashineInRunMode :BOOL := FALSE;
+	MashineInStopMode :BOOL := TRUE;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>
